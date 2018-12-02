@@ -1,5 +1,5 @@
 ﻿/*
- * 원저작자 : http://shalgorithmstd.tistory.com/255
+ * 참고 코드 원저작자 : http://shalgorithmstd.tistory.com/255
  * Modified by :Jiwon Kim <email@jiwon.kim>
  * @title : 숫자퍼즐게임
  * @description : 	퍼즐 5x5, 1~24숫자 , 초기 가장 마지막 칸은 공백
@@ -51,32 +51,73 @@ void initBoard()
 	iNum[24] = EMPTY;
 }
 
-enum { GAME, SOLVE };
+
+int tBoard[24] = {};
+void SetTargetBoard()
+{
+	for (int i = 0; i < 24; i++) {
+		iNum[i] = i + 1;
+	}
+	iNum[24] = EMPTY;
+}
+
+enum BoardType { NUMBER5X5, SIXCOLOR4 };
+enum ProgMode { GAME, SOLVE };
+
+BoardType curBoard = NUMBER5X5;
+
+void drawTargetBoard()
+{
+	if (curBoard == SIXCOLOR4)
+	{
+
+	}
+}
+
+
 
 void drawBoard(int step)
 {
-	system("cls");
-
 	//일차원 배열을 이차원 배열처럼 사용
-	printf("     *#*  5 X 5  Sliding Puzzle  *#*\n");
-	printf("=========================================\n");
+
+	printf("┌"); 
 	for (int i = 0; i < 5; i++) {
-		printf("| ");
+		for (int j = 0; j < 7; j++) printf("─"); if(i<4) printf("┬");
+	}	printf("┐\n");
+
+	for (int i = 0; i < 5; i++) {
+		printf("│ ");
 		for (int j = 0; j < 5; j++) {
 			if (iNum[i * 5 + j] == EMPTY) {
 				printf("*\t");
 			}
 			else cout << iNum[i * 5 + j] << "\t";
-			printf("| ");
+			printf("│ ");
 
 		}cout << endl;
-		printf("=========================================\n");
+
+		if (i < 4) {
+			printf("├");
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 7; j++) printf("─"); if (i < 4) printf("┼");
+			}
+			printf("┤\n");
+		}
 	}
 
-	printf("      ↑     w        step : %d\n", step);
-	printf("    ←  → a   d   \n");
-	printf("      ↓     s     \n\n");
-	printf(" Q, q : 종료 \n");
+	printf("└");
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 7; j++) printf("─"); if (i<4) printf("┴");
+	}	printf("┘\n");
+
+
+	printf("\n┌"); for (int i = 0; i < 39; i++) printf("─"); 	printf("┐\n");
+	printf("│      ↑      w        step : %3d      │\n", step);
+	printf("│    ←  →  a   d                      │\n");
+	printf("│      ↓      s                        │\n");
+	printf("│                                       │\n");
+	printf("│  Q, q : 종료                          │\n");
+	printf("└"); for (int i = 0; i < 39; i++) printf("─"); 	printf("┘\n");
 }
 
 enum COND1 { GT, LT, MODULO5, NEQMODULE5 };
@@ -139,6 +180,12 @@ int main() {
 
 	// User Input step
 	while (true) {
+		// Refresh Screen
+		system("cls");
+		// Title
+		printf("     *#*  5 X 5  Sliding Puzzle  *#*\n");
+
+		drawTargetBoard();
 		drawBoard(cnt);
 
 		char cinput = _getch();
@@ -166,7 +213,7 @@ int main() {
 		cout << endl;
 	}
 
-	cout << "게임을 종료합니다. \nTry :: " << cnt << endl;
+	printf("게임을 종료합니다. \nTry :: %d\n", cnt);
 	system("pause");
 	return 0;
 }
